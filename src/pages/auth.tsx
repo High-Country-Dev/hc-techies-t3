@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { signIn } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import React from "react";
 import { useQueryClient } from "react-query";
+import Link from "next/link";
 
 const Login: NextPage = () => {
   // const { data: session } = useSession()
@@ -98,12 +98,12 @@ const Login: NextPage = () => {
             Logout
           </button>
         )}
-        <a
+        <Link
           className="m-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
           href={"/"}
         >
           Return Home
-        </a>
+        </Link>
       </main>
     </>
   );

@@ -3,6 +3,7 @@ import Head from "next/head";
 import { inferQueryOutput, trpc } from "../utils/trpc";
 import React from "react";
 import { useQueryClient } from "react-query";
+import Link from "next/link";
 
 type PostType = inferQueryOutput<"post.getById">;
 
@@ -73,10 +74,15 @@ const Posts: NextPage = () => {
               </label>
             </div>
             <button
-              className="my-2 m-2bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
+              disabled={!self}
+              className={
+                self
+                  ? "my-2 m-2bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
+                  : "my-2 m-2bg-transparent text-gray-500  font-semibold  py-1 px-4 border  rounded"
+              }
               onClick={() => createPost({ title, content, isPrivate })}
             >
-              Post
+              {self ? "Post" : "You must be logged in to post"}
             </button>
             {self ? (
               <button
@@ -86,12 +92,12 @@ const Posts: NextPage = () => {
                 Logout
               </button>
             ) : (
-              <a
+              <Link
                 className="my-2 m-2bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
                 href={"/auth"}
               >
                 Login
-              </a>
+              </Link>
             )}
           </div>
           <div className="flex flex-col flex-wrap  max-h-screen">
