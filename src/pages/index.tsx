@@ -9,7 +9,8 @@ type TechnologyCardProps = {
 };
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const { data, isLoading } = trpc.useQuery(["self.get"]);
+  // const { data: session } = useSession();
 
   return (
     <>
@@ -21,10 +22,52 @@ const Home: NextPage = () => {
 
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          <span className="text-green-400">High Country Techies</span> - Create{" "}
-          <span className="text-purple-400">T3</span> App
+          Create <span className="text-purple-400">T3</span> App{" "}
         </h1>
-        <p className="text-2xl text-gray-700">This stack uses:</p>
+        <h2 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
+          <span className="text-green-400">High Country Techies</span>
+        </h2>
+        <div className="pt-6 text-2xl flex justify-center items-center w-full">
+          <span>
+            {isLoading ? (
+              "Loading..."
+            ) : !data ? (
+              <a href="/auth" className="underline text-blue-500">
+                Please log in
+              </a>
+            ) : (
+              <>
+                Welcome <span className="text-blue-500"> {data.email}</span>!
+              </>
+            )}
+          </span>
+        </div>
+
+        <p className="text-2xl text-gray-700 mt-8">Explore Features:</p>
+        <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
+          <FeatureCard
+            name="Database Dashboard (Local Only)"
+            description="Database management"
+            documentation="http://localhost:5555"
+          />
+          <FeatureCard
+            name="Auth"
+            description="Sign up and sign in"
+            documentation="/auth"
+          />
+          <FeatureCard
+            name="Database"
+            description="Create and view posts (public and private)"
+            documentation="/posts"
+          />
+          {/*
+          <FeatureCard
+            name="tRPC"
+            description="End-to-end typesafe APIs made easy"
+            documentation="https://trpc.io/"
+          /> */}
+        </div>
+        <p className="text-2xl text-gray-700 mt-4">This stack uses:</p>
         <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
           <TechnologyCard
             name="NextJS"
@@ -47,9 +90,6 @@ const Home: NextPage = () => {
             documentation="https://trpc.io/"
           />
         </div>
-        <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
-          {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
-        </div>
       </main>
     </>
   );
@@ -71,6 +111,25 @@ const TechnologyCard = ({
         rel="noreferrer"
       >
         Documentation
+      </a>
+    </section>
+  );
+};
+
+const FeatureCard = ({
+  name,
+  description,
+  documentation,
+}: TechnologyCardProps) => {
+  return (
+    <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
+      <h2 className="text-lg text-gray-700">{name}</h2>
+      <p className="text-sm text-gray-600">{description}</p>
+      <a
+        className="mt-3 text-sm underline text-violet-500 decoration-dotted underline-offset-2"
+        href={documentation}
+      >
+        Explore
       </a>
     </section>
   );
