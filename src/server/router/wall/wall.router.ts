@@ -5,8 +5,12 @@ const postRouter = createRouter().query("getAll", {
     return ctx.user
       ? ctx.prisma.post.findMany({
           where: { OR: [{ isPrivate: false }, { userId: ctx.user.id }] },
+          include: { user: true },
         })
-      : ctx.prisma.post.findMany({ where: { isPrivate: false } });
+      : ctx.prisma.post.findMany({
+          where: { isPrivate: false },
+          include: { user: true },
+        });
   },
 });
 

@@ -15,6 +15,7 @@ const postRouter = createProtectedRouter()
     resolve({ ctx, input }) {
       return ctx.prisma.post.findUnique({
         where: { id: input },
+        include: { user: true },
       });
     },
   })
